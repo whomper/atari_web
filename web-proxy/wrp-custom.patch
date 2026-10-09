@@ -1,0 +1,79 @@
+diff --git a/Dockerfile b/Dockerfile
+index 5f0762d..5638959 100644
+--- a/Dockerfile
++++ b/Dockerfile
+@@ -1,7 +1,6 @@
+ FROM golang AS builder
+-WORKDIR /src
+-RUN git clone https://github.com/tenox7/wrp.git
+ WORKDIR /src/wrp
++COPY . .
+ RUN go mod download
+ ARG TARGETARCH
+ RUN CGO_ENABLED=0 GOOS=linux GOARCH=${TARGETARCH} go build -o /wrp-${TARGETARCH}
+diff --git a/shtml.go b/shtml.go
+index 15a95da..7c52cb2 100644
+--- a/shtml.go
++++ b/shtml.go
+@@ -3,7 +3,9 @@ package main
+ 
+ import (
+ 	"bytes"
++	"crypto/sha256"
+ 	"encoding/base64"
++	"encoding/hex"
+ 	"errors"
+ 	"fmt"
+ 	"image"
+@@ -22,7 +24,6 @@ import (
+ 	"github.com/PuerkitoBio/goquery"
+ 	"github.com/chromedp/cdproto/emulation"
+ 	"github.com/chromedp/chromedp"
+-	"github.com/lithammer/shortuuid/v4"
+ 	"github.com/nfnt/resize"
+ 	"github.com/srwiley/oksvg"
+ 	"github.com/srwiley/rasterx"
+@@ -189,7 +190,7 @@ func smallImg(src []byte, imgType string, maxSize, imgOpt int) ([]byte, int, int
+ 	if err != nil {
+ 		return nil, 0, 0, fmt.Errorf("image decode problem: %v", err)
+ 	}
+-	img = resize.Thumbnail(uint(maxSize), uint(maxSize), img, resize.NearestNeighbor)
++	img = resize.Thumbnail(uint(maxSize), uint(maxSize), img, resize.Lanczos3)
+ 	b := img.Bounds()
+ 	var outBuf bytes.Buffer
+ 	switch imgType {
+@@ -315,7 +316,8 @@ func simplifyDOM(doc *goquery.Document, rq *wrpReq) int {
+ 			return
+ 		}
+ 		abs := resolveURL(src, baseURL)
+-		seq := shortuuid.New() + "." + imgExt
++		h := sha256.Sum256([]byte(abs + imgExt + strconv.Itoa(int(rq.maxSize)) + strconv.Itoa(imgOpt)))
++		seq := hex.EncodeToString(h[:8]) + "." + imgExt
+ 		jobs = append(jobs, imgJob{sel: s, seq: seq, abs: abs})
+ 	})
+ 
+@@ -409,6 +411,7 @@ func imgServerTxt(w http.ResponseWriter, r *http.Request) {
+ 	}
+ 	w.Header().Set("Content-Type", http.DetectContentType(img))
+ 	w.Header().Set("Content-Length", strconv.Itoa(len(img)))
++	w.Header().Set("Cache-Control", "public, max-age=86400")
+ 	w.Write(img)
+ 	w.(http.Flusher).Flush()
+ }
+diff --git a/wrp.go b/wrp.go
+index 435cbae..4448033 100644
+--- a/wrp.go
++++ b/wrp.go
+@@ -209,7 +209,11 @@ func (rq *wrpReq) parseForm() {
+ 	}
+ 	rq.url = rq.r.FormValue("url")
+ 	if len(rq.url) > 1 && !strings.HasPrefix(rq.url, "http") {
+-		rq.url = *searchEng + url.QueryEscape(rq.url)
++		if !strings.Contains(rq.url, " ") && strings.Contains(rq.url, ".") {
++			rq.url = "http://" + rq.url
++		} else {
++			rq.url = *searchEng + url.QueryEscape(rq.url)
++		}
+ 	}
+ 	// TODO: implement atoiOrZero
+ 	rq.width, _ = strconv.ParseInt(rq.r.FormValue("w"), 10, 64)
