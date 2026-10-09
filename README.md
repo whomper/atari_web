@@ -15,4 +15,4 @@ Pi: `192.168.68.126` (user `erez`). Falcon: `192.168.68.129`.
 |---|---|---|
 | 143 (IMAP), 587 (SMTP) | MAIL.PRG | mail-proxy, from [whomper/mail `gateway/`](https://github.com/whomper/mail/tree/main/gateway) |
 | 1143 (IMAP) | TROLL | troll-proxy, this repository's [`email-proxy/`](email-proxy/) |
-| 25 (SMTP) | TROLL | the Pi's existing SMTP relay |
+| 25 (SMTP) | TROLL | Postfix on the Pi |

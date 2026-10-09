@@ -1,6 +1,6 @@
 #!/bin/bash
 # Installs / updates troll-proxy (IMAP for TROLL on port 1143) from the
-# files in this folder. TROLL's SMTP (port 25) is set up separately on the
+# files in this folder. TROLL's SMTP (Postfix, port 25) is set up separately on the
 # Pi. Ports 143 and 587 are left for mail-proxy (MAIL.PRG).
 set -e
 cd "$(dirname "$0")"

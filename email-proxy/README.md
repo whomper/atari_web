@@ -2,13 +2,13 @@
 
 ```
 TROLL --plain IMAP :1143--> [falcon_imap_logproxy.py] --verified TLS--> imap.mail.me.com:993
-TROLL --plain SMTP :25  --> the Pi's existing SMTP relay (not in this folder)
+TROLL --plain SMTP :25  --> Postfix on the Pi (relays to iCloud; not in this folder)
 ```
 
 | Port on the Pi (192.168.68.126) | For | Program |
 |---|---|---|
 | 1143 | TROLL incoming (IMAP) | troll-proxy (`falcon_imap_logproxy.py`) |
-| 25 | TROLL outgoing (SMTP) | the Pi's existing SMTP relay, set up separately |
+| 25 | TROLL outgoing (SMTP) | Postfix on the Pi, set up separately |
 | 143, 587 | MAIL.PRG incoming / outgoing | mail-proxy: a plain TLS tunnel, see [whomper/mail `gateway/`](https://github.com/whomper/mail/tree/main/gateway) |
 
 troll-proxy is for TROLL only. MAIL.PRG does its own MIME, HTML and Hebrew
