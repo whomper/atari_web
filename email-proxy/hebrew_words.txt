@@ -1,0 +1,10 @@
+# Extra Hebrew words for the Falcon mail gateway.
+# One entry per line:   <hebrew word>   <how it should appear>
+# Lines starting with # are ignored.  Entries here override the built-in list.
+# Write the word as it appears in the mail (no vowel points needed); prefixes such as
+# ha-, ve-, be-, le-, me-, ke-, she- are handled automatically.
+# After editing:  sudo systemctl restart falcon-imap-logproxy.service
+#
+# Examples (remove the # to use):
+#ירושלים Jerusalem
+#מסמך document

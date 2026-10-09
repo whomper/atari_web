@@ -1,0 +1,11 @@
+From: Charmap Test <test@example.invalid>
+To: yaary@me.com
+Subject: Charmap test 80-FF
+Date: Fri, 3 Oct 2026 12:00:00 +0300
+Message-ID: <falcon-charmap-1@example.invalid>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="x-atari-st"
+Content-Transfer-Encoding: 8bit
+
+NOTE: the original test file contains raw bytes 0x80-0xFF, which cannot be stored
+in this text copy. Regenerate it with the proxy's to_atari_bytes() or ask Claude.
