@@ -2,13 +2,13 @@
 
 ```
 TROLL --plain IMAP :1143--> [falcon_imap_logproxy.py] --verified TLS--> imap.mail.me.com:993
-TROLL --plain SMTP :1025--> [stunnel, troll-smtp.conf] --STARTTLS-->    smtp.mail.me.com:587
+TROLL --plain SMTP :25  --> the Pi's existing SMTP relay (not in this folder)
 ```
 
 | Port on the Pi (192.168.68.126) | For | Program |
 |---|---|---|
 | 1143 | TROLL incoming (IMAP) | troll-proxy (`falcon_imap_logproxy.py`) |
-| 1025 | TROLL outgoing (SMTP) | troll-proxy (stunnel, `troll-smtp.conf`) |
+| 25 | TROLL outgoing (SMTP) | the Pi's existing SMTP relay, set up separately |
 | 143, 587 | MAIL.PRG incoming / outgoing | mail-proxy: a plain TLS tunnel, see [whomper/mail `gateway/`](https://github.com/whomper/mail/tree/main/gateway) |
 
 troll-proxy is for TROLL only. MAIL.PRG does its own MIME, HTML and Hebrew
@@ -16,7 +16,7 @@ layout and wants the original messages, so it uses mail-proxy on the
 standard ports; both run side by side on the Pi.
 
 In TROLL: IMAP server `192.168.68.126` port `1143`, SMTP server
-`192.168.68.126` port `1025`.
+`192.168.68.126` port `25`.
 
 Rewrites only what TROLL downloads. Originals in iCloud are never modified.
 
@@ -29,13 +29,13 @@ Rewrites only what TROLL downloads. Originals in iCloud are never modified.
 ## Install on the Pi
 
 ```
-scp falcon_imap_logproxy.py falcon-imap-logproxy.service hebrew_words.txt troll-smtp.conf install_falcon_proxy.sh erez@192.168.68.126:~/
+scp falcon_imap_logproxy.py falcon-imap-logproxy.service hebrew_words.txt install_falcon_proxy.sh erez@192.168.68.126:~/
 ssh erez@192.168.68.126 'bash ~/install_falcon_proxy.sh'
 ```
 
-Installed files: `/opt/falcon-imap/falcon_imap_logproxy.py`, `/opt/falcon-imap/hebrew_words.txt`, `/etc/systemd/system/falcon-imap-logproxy.service` (IMAP on 1143), `/etc/stunnel/troll-smtp.conf` (SMTP on 1025).
+Installed files: `/opt/falcon-imap/falcon_imap_logproxy.py`, `/opt/falcon-imap/hebrew_words.txt`, `/etc/systemd/system/falcon-imap-logproxy.service` (IMAP on 1143).
 
-The ports are in `falcon-imap-logproxy.service` (`--port 1143`) and `troll-smtp.conf` (`accept = 0.0.0.0:1025`); keep them off 143 and 587, which mail-proxy uses.
+The port is in `falcon-imap-logproxy.service` (`--port 1143`); keep it off 143 and 587, which mail-proxy uses.
 
 After editing the word list: `sudo systemctl restart falcon-imap-logproxy.service`.
 
