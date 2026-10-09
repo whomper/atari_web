@@ -52,18 +52,18 @@ MAX_REWRITE = 30 * 1024 * 1024
 
 # ---- Hebrew -> Latin, letter for letter.  Edit this table to taste.
 HEB_MAP = {
-    "א": "a",  "ב": "b",  "ג": "g",  "ד": "d",  "ה": "h",
-    "ו": "v",  "ז": "z",  "ח": "ch", "ט": "t",  "י": "y",
-    "כ": "k",  "ך": "k",  "ל": "l",  "מ": "m",  "ם": "m",
-    "נ": "n",  "ן": "n",  "ס": "s",  "ע": "e",  "פ": "p",
-    "ף": "p",  "צ": "ts", "ץ": "ts", "ק": "q",  "ר": "r",
-    "ש": "sh", "ת": "t",
-    "װ": "vv", "ױ": "vy", "ײ": "yy",          # Yiddish ligatures
-    "־": "-",  "׀": "|",  "׃": ":",  "׳": "'",  "״": '"',
+    "\\u05D0": "a",  "\\u05D1": "b",  "\\u05D2": "g",  "\\u05D3": "d",  "\\u05D4": "h",
+    "\\u05D5": "v",  "\\u05D6": "z",  "\\u05D7": "ch", "\\u05D8": "t",  "\\u05D9": "y",
+    "\\u05DB": "k",  "\\u05DA": "k",  "\\u05DC": "l",  "\\u05DE": "m",  "\\u05DD": "m",
+    "\\u05E0": "n",  "\\u05DF": "n",  "\\u05E1": "s",  "\\u05E2": "e",  "\\u05E4": "p",
+    "\\u05E3": "p",  "\\u05E6": "ts", "\\u05E5": "ts", "\\u05E7": "q",  "\\u05E8": "r",
+    "\\u05E9": "sh", "\\u05EA": "t",
+    "\\u05F0": "vv", "\\u05F1": "vy", "\\u05F2": "yy",          # Yiddish ligatures
+    "\\u05BE": "-",  "\\u05C0": "|",  "\\u05C3": ":",  "\\u05F3": "'",  "\\u05F4": '"',
 }
-HEB_RE = re.compile("[֐-׿יִ-ﭏ]")
-HEB_PRES_RE = re.compile("[יִ-ﭏ]")
-BIDI_RE = re.compile("[‎‏‪-‮⁦-⁩]")
+HEB_RE = re.compile("[\\u0590-\\u05FF\\uFB1D-\\uFB4F]")
+HEB_PRES_RE = re.compile("[\\uFB1D-\\uFB4F]")
+BIDI_RE = re.compile("[\\u200e\\u200f\\u202a-\\u202e\\u2066-\\u2069]")
 
 
 # ---- Hebrew -> Latin, phonetic ("Shalom Olam") ---------------------------------
@@ -473,23 +473,23 @@ DEFAULT_WORDS = """
 חשבונית cheshbonit
 """
 
-_HL = "א-תװ-ײיִ-ﭏ"
-_MK = "֑-ׇ"
-_GER = "גזצתחדט"
+_HL = "\\u05D0-\\u05EA\\u05F0-\\u05F2\\uFB1D-\\uFB4F"
+_MK = "\\u0591-\\u05C7"
+_GER = "\\u05D2\\u05D6\\u05E6\\u05EA\\u05D7\\u05D3\\u05D8"
 HEB_TOKEN_RE = re.compile(
-    "(?:[" + _HL + _MK + "]|(?<=[" + _GER + "])׳|(?<=[" + _GER + "])'(?=[" + _HL + "]))+"
-    "(?:[״\"][" + _HL + "](?:[" + _HL + _MK + "]|(?<=[" + _GER + "])׳)*)*")
-_STRIP_RE = re.compile("[" + _MK + "׳״'\"]")
-_FINAL_FORM = {"ך": "כ", "ם": "מ", "ן": "נ",
-               "ף": "פ", "ץ": "צ"}
-_CONS = {"ב": "b", "ג": "g", "ד": "d", "ה": "h", "ז": "z",
-         "ח": "ch", "ט": "t", "כ": "kh", "ל": "l", "מ": "m",
-         "נ": "n", "ס": "s", "פ": "f", "צ": "tz", "ק": "k",
-         "ר": "r", "ש": "sh", "ת": "t"}
-_GERESH_CONS = {"ג": "j", "ז": "zh", "צ": "ch", "ת": "th",
-                "ח": "kh", "ד": "dh", "ט": "t"}
-_PREFIX = {"ו": "ve", "ה": "ha", "ב": "be", "ל": "le",
-           "מ": "me", "כ": "ke", "ש": "she"}
+    "(?:[" + _HL + _MK + "]|(?<=[" + _GER + "])\\u05F3|(?<=[" + _GER + "])'(?=[" + _HL + "]))+"
+    "(?:[\\u05F4\\"][" + _HL + "](?:[" + _HL + _MK + "]|(?<=[" + _GER + "])\\u05F3)*)*")
+_STRIP_RE = re.compile("[" + _MK + "\\u05F3\\u05F4'\\"]")
+_FINAL_FORM = {"\\u05DA": "\\u05DB", "\\u05DD": "\\u05DE", "\\u05DF": "\\u05E0",
+               "\\u05E3": "\\u05E4", "\\u05E5": "\\u05E6"}
+_CONS = {"\\u05D1": "b", "\\u05D2": "g", "\\u05D3": "d", "\\u05D4": "h", "\\u05D6": "z",
+         "\\u05D7": "ch", "\\u05D8": "t", "\\u05DB": "kh", "\\u05DC": "l", "\\u05DE": "m",
+         "\\u05E0": "n", "\\u05E1": "s", "\\u05E4": "f", "\\u05E6": "tz", "\\u05E7": "k",
+         "\\u05E8": "r", "\\u05E9": "sh", "\\u05EA": "t"}
+_GERESH_CONS = {"\\u05D2": "j", "\\u05D6": "zh", "\\u05E6": "ch", "\\u05EA": "th",
+                "\\u05D7": "kh", "\\u05D3": "dh", "\\u05D8": "t"}
+_PREFIX = {"\\u05D5": "ve", "\\u05D4": "ha", "\\u05D1": "be", "\\u05DC": "le",
+           "\\u05DE": "me", "\\u05DB": "ke", "\\u05E9": "she"}
 
 HEB_WORDS = {}
 HEB_MODE = "phonetic"          # or "literal"
@@ -527,10 +527,10 @@ def _phonetic_word(tok):
     letters, i = [], 0
     while i < len(tok):
         ch = tok[i]
-        if ch in "׳'\"״" or "֑" <= ch <= "ׇ":
+        if ch in "\\u05F3'\\"\\u05F4" or "\\u0591" <= ch <= "\\u05C7":
             i += 1
             continue
-        ger = i + 1 < len(tok) and tok[i + 1] in "׳'" and ch in _GERESH_CONS
+        ger = i + 1 < len(tok) and tok[i + 1] in "\\u05F3'" and ch in _GERESH_CONS
         letters.append((_FINAL_FORM.get(ch, ch), ch in _FINAL_FORM, ger))
         i += 2 if ger else 1
     n, units, k = len(letters), [], 0           # unit: [kind, text, strength]
@@ -543,29 +543,29 @@ def _phonetic_word(tok):
         prev_carrier = prev is not None and prev[0] == "V" and prev[2] == "carrier"
         if ger:
             units.append(["C", _GERESH_CONS[base], ""])
-        elif base == "ו":                                   # vav
-            if nxt == "ו":
+        elif base == "\\u05D5":                                   # vav
+            if nxt == "\\u05D5":
                 units.append(["C", "v", ""]); k += 1
             elif k == 0 or prev_real_v:
                 units.append(["C", "v", ""])
             else:
                 units.append(["V", "o", "real"])
-        elif base == "י":                                   # yod
-            if nxt == "י":
+        elif base == "\\u05D9":                                   # yod
+            if nxt == "\\u05D9":
                 units.append(["C", "y", ""]); k += 1
             elif k == 0 or prev_real_v:
                 units.append(["C", "y", ""])
             else:
                 units.append(["V", "i", "real"])
-        elif base in "אע":                             # alef / ayin
+        elif base in "\\u05D0\\u05E2":                             # alef / ayin
             units.append(["V", "a", "carrier"])
-        elif base == "ה" and last and k > 0:                # final he
+        elif base == "\\u05D4" and last and k > 0:                # final he
             units.append(["V", "a", "weak"])
-        elif base == "ב":
+        elif base == "\\u05D1":
             units.append(["C", "v" if (last and k > 0) else "b", ""])
-        elif base == "כ":
+        elif base == "\\u05DB":
             units.append(["C", "kh" if (final or k > 0) else "k", ""])
-        elif base == "פ":
+        elif base == "\\u05E4":
             units.append(["C", "f" if (final or k > 0) else "p", ""])
         else:
             units.append(["C", _CONS.get(base, "?"), ""])
@@ -615,7 +615,7 @@ def hebrew_word_to_latin(tok, words):
                 syl = ""
                 for idx, c in enumerate(p):
                     s = _PREFIX[c]
-                    if c == "ו" and idx == 0 and rest[0] in "במפו":
+                    if c == "\\u05D5" and idx == 0 and rest[0] in "\\u05D1\\u05DE\\u05E4\\u05D5":
                         s = "u"
                     syl += s
                 tail = words[rest]
@@ -630,7 +630,7 @@ def translit_hebrew_literal(s):
     for ch in s:
         if ch in HEB_MAP:
             out.append(HEB_MAP[ch])
-        elif "֑" <= ch <= "ׇ":
+        elif "\\u0591" <= ch <= "\\u05C7":
             continue
         elif BIDI_RE.match(ch):
             continue
@@ -675,9 +675,9 @@ _ST_HIGH = ("ÇüéâäàåçêëèïîìÄÅ"
             "≡±≥≤⌠⌡÷≈°∙·√ⁿ²³¯")
 assert len(_ST_HIGH) == 128
 ST_TO = {ch: 0x80 + i for i, ch in enumerate(_ST_HIGH)}
-HEB_PUNCT = {"־": "-", "׳": "'", "״": '"', "׀": "|", "׃": ":"}
+HEB_PUNCT = {"\\u05BE": "-", "\\u05F3": "'", "\\u05F4": '"', "\\u05C0": "|", "\\u05C3": ":"}
 MIRROR = {"(": ")", ")": "(", "[": "]", "]": "[", "{": "}", "}": "{", "<": ">", ">": "<",
-          "«": "»", "»": "«"}
+          "\\u00AB": "\\u00BB", "\\u00BB": "\\u00AB"}
 GLYPH = {"label": "x-atari-st", "cte": "8bit", "width": 60, "subject": "encoded-q",
          "subject_label": None}
 
@@ -695,9 +695,9 @@ def to_atari_bytes(text):
             out.append(ord(ch))
         elif ch in ST_TO:
             out.append(ST_TO[ch])
-        elif ch == "€":
+        elif ch == "\\u20AC":
             out += b"EUR"
-        elif ch == "×":
+        elif ch == "\\u00D7":
             out += b"x"
         elif len(ch) == 1 and unicodedata.combining(ch):
             continue                                         # niqqud, accents
@@ -891,21 +891,21 @@ class Ctx:
 
 # ---- Atari-safe text: remove invisible / unsupported characters ---------------
 PUNCT_MAP = {
-    "‘": "'", "’": "'", "‚": "'", "‛": "'", "′": "'",
-    "“": '"', "”": '"', "„": '"', "‟": '"', "″": '"',
-    "–": "-", "−": "-", "‐": "-", "‑": "-", "‒": "-",
-    "—": "--", "―": "--", "…": "...",
-    "•": "*", "‣": "*", "◦": "*", "▪": "*", "●": "*",
-    "‹": "<", "›": ">", "⁄": "/", "™": "(TM)", "₪": "NIS",
-    "→": "->", "←": "<-", " ": "\n", " ": "\n",
+    "\\u2018": "'", "\\u2019": "'", "\\u201A": "'", "\\u201B": "'", "\\u2032": "'",
+    "\\u201C": '"', "\\u201D": '"', "\\u201E": '"', "\\u201F": '"', "\\u2033": '"',
+    "\\u2013": "-", "\\u2212": "-", "\\u2010": "-", "\\u2011": "-", "\\u2012": "-",
+    "\\u2014": "--", "\\u2015": "--", "\\u2026": "...",
+    "\\u2022": "*", "\\u2023": "*", "\\u25E6": "*", "\\u25AA": "*", "\\u25CF": "*",
+    "\\u2039": "<", "\\u203A": ">", "\\u2044": "/", "\\u2122": "(TM)", "\\u20AA": "NIS",
+    "\\u2192": "->", "\\u2190": "<-", "\\u2028": "\n", "\\u2029": "\n",
 }
-LATIN_MAP = {"Ł": "L", "ł": "l", "Đ": "D", "đ": "d", "ı": "i",
-             "Œ": "OE", "œ": "oe", "Ħ": "H", "ħ": "h", "Ŧ": "T",
-             "ŧ": "t", "ẞ": "SS"}
-SPACE_RE = re.compile("[   -   　]")
+LATIN_MAP = {"\\u0141": "L", "\\u0142": "l", "\\u0110": "D", "\\u0111": "d", "\\u0131": "i",
+             "\\u0152": "OE", "\\u0153": "oe", "\\u0126": "H", "\\u0127": "h", "\\u0166": "T",
+             "\\u0167": "t", "\\u1E9E": "SS"}
+SPACE_RE = re.compile("[\\u00A0\\u1680\\u2000-\\u200A\\u202F\\u205F\\u3000]")
 # zero-width / formatting characters and the "combining grapheme joiner" padding
-INVISIBLE_RE = re.compile("[­͏؜᠎​-‏‪-‮"
-                          "⁠-⁤⁦-⁯︀-️﻿\U000E0000-\U000E007F]")
+INVISIBLE_RE = re.compile("[\\u00AD\\u034F\\u061C\\u180E\\u200B-\\u200F\\u202A-\\u202E"
+                          "\\u2060-\\u2064\\u2066-\\u206F\\uFE00-\\uFE0F\\uFEFF\\U000E0000-\\U000E007F]")
 
 
 def _clean_line(l):
@@ -913,7 +913,7 @@ def _clean_line(l):
     out = []
     for ch in t:
         o = ord(ch)
-        if o < 0x100 or ch == "€":
+        if o < 0x100 or ch == "\\u20AC":
             out.append(ch)
         elif ch in PUNCT_MAP:
             out.append(PUNCT_MAP[ch])
@@ -944,7 +944,7 @@ def clean_text(s, tidy=False):
     punctuation as ASCII, emoji/pictographs removed.  Latin-1 letters (a-umlaut,
     sharp-s, ...) and the euro sign are kept; other scripts are left alone.
     tidy=True (converted HTML only) also drops adjacent duplicate lines."""
-    s = s.replace(" ", "\n").replace(" ", "\n")
+    s = s.replace("\\u2028", "\n").replace("\\u2029", "\n")
     res, last = [], None
     for l in s.split("\n"):
         c = _clean_line(l)
@@ -1219,7 +1219,7 @@ def html_to_text(h):
     p = _H2T()
     p.feed(h)
     p.close()
-    t = "".join(p.out).replace("\xa0", " ").replace("​", "")
+    t = "".join(p.out).replace("\xa0", " ").replace("\\u200b", "")
     lines = [re.sub(r"[ \t]+", " ", l).strip() for l in t.split("\n")]
     t = "\n".join(lines)
     return re.sub(r"\n{3,}", "\n\n", t).strip()
