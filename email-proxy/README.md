@@ -18,6 +18,15 @@ standard ports; both run side by side on the Pi.
 In TROLL: IMAP server `192.168.68.126` port `1143`, SMTP server
 `192.168.68.126` port `25`.
 
+The Pi's firewall (ufw) must let the Falcon in on these ports:
+
+```
+sudo ufw allow from 192.168.68.129 to any port 1143 proto tcp   # troll-proxy
+sudo ufw allow from 192.168.68.129 to any port 25 proto tcp     # Postfix
+sudo ufw allow from 192.168.68.129 to any port 143 proto tcp    # mail-proxy
+sudo ufw allow from 192.168.68.129 to any port 587 proto tcp    # mail-proxy
+```
+
 Rewrites only what TROLL downloads. Originals in iCloud are never modified.
 
 - Fixes multipart `Content-Type` (TROLL needs `boundary="..."` as the only parameter, no trailing `;`, no `type=`).
