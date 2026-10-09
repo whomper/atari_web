@@ -1,11 +1,11 @@
 [Unit]
-Description=Falcon IMAP proxy (log + Content-Type rewrite)
+Description=troll-proxy: IMAP for TROLL on port 1143 (log + rewrite for the Falcon)
 Wants=network-online.target
 After=network-online.target
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/python3 /opt/falcon-imap/falcon_imap_logproxy.py --listen 192.168.68.126 --port 143 --rewrite --hebrew-mode glyph --glyph-width 60 --hebrew-words /opt/falcon-imap/hebrew_words.txt
+ExecStart=/usr/bin/python3 /opt/falcon-imap/falcon_imap_logproxy.py --listen 192.168.68.126 --port 1143 --rewrite --hebrew-mode glyph --glyph-width 60 --hebrew-words /opt/falcon-imap/hebrew_words.txt
 Restart=on-failure
 RestartSec=5s
 DynamicUser=yes
