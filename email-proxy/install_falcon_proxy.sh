@@ -1,7 +1,7 @@
 #!/bin/bash
 # Installs / updates troll-proxy (IMAP for TROLL on port 1143) from the
 # files in this folder. TROLL's SMTP (Postfix, port 25) is set up separately on the
-# Pi. Ports 143 and 587 are left for mail-proxy (MAIL.PRG).
+# Pi. Ports 143 and 587 are left for mail-proxy (EMAIL.PRG).
 set -e
 cd "$(dirname "$0")"
 for f in falcon_imap_logproxy.py falcon-imap-logproxy.service hebrew_words.txt; do

@@ -9,9 +9,9 @@ TROLL --plain SMTP :25  --> Postfix on the Pi (relays to iCloud; not in this fol
 |---|---|---|
 | 1143 | TROLL incoming (IMAP) | troll-proxy (`falcon_imap_logproxy.py`) |
 | 25 | TROLL outgoing (SMTP) | Postfix on the Pi, set up separately |
-| 143, 587 | MAIL.PRG incoming / outgoing | mail-proxy: a plain TLS tunnel, see [whomper/mail `gateway/`](https://github.com/whomper/mail/tree/main/gateway) |
+| 143, 587 | EMAIL.PRG incoming / outgoing | mail-proxy: a plain TLS tunnel, see [whomper/EMail `gateway/`](https://github.com/whomper/EMail/tree/main/gateway) |
 
-troll-proxy is for TROLL only. MAIL.PRG does its own MIME, HTML and Hebrew
+troll-proxy is for TROLL only. EMAIL.PRG does its own MIME, HTML and Hebrew
 layout and wants the original messages, so it uses mail-proxy on the
 standard ports; both run side by side on the Pi.
 
